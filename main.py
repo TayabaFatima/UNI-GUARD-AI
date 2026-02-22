@@ -1,19 +1,28 @@
-def check_link(url):
-    suspicious_keywords = [
-        "login", "verify", "bank", "secure",
-        "account", "update", "password", "phishing"
-    ]
+from core.detector import analyze_link
+from core.auto_block import take_action
+import json
 
-    for word in suspicious_keywords:
-        if word in url.lower():
-            return "BLOCKED ⚠️ Phishing Detected"
+def save_log(link, status):
+    data = {
+        "link": link,
+        "status": status
+    }
 
-    if url.startswith("http://"):
-        return "WARNING ⚠️ Not Secure (HTTP)"
+    try:
+        with open("database.json", "r") as file:
+            logs = json.load(file)
+    except:
+        logs = []
 
-    return "SAFE ✅"
+    logs.append(data)
 
+    with open("database.json", "w") as file:
+        json.dump(logs, file, indent=4)
 
+# Run system
 link = input("Enter a link: ")
-result = check_link(link)
-print(result)
+
+result = analyze_link(link)
+status = take_action(result, link)
+
+save_log(link, status)
