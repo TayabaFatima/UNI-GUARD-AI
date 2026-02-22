@@ -3,6 +3,7 @@
     suspicious_keywords = [
         "login", "verify", "bank", "secure",
         "account", "update", "password", "phishing"
+       "signin", "confirm", "credit", "debit"
     ]
 
     for word in suspicious_keywords:
